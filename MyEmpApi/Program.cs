@@ -1,13 +1,14 @@
+using MyEmpApi.Data;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Newtonsoft.Json.Schema;
 using System;
 using System.Diagnostics;
 using System.IO;
 using System.Runtime.InteropServices;
-using MyEmpApi.Data;
-
+using Newtonsoft.Json.Linq;
 
 namespace MyEmpApi
 {
@@ -34,6 +35,7 @@ namespace MyEmpApi
 
             var app = builder.Build();
 
+
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
             {
@@ -43,7 +45,7 @@ namespace MyEmpApi
                     c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
                 });
 
-                // Open Swagger UI page in default browser
+                // Open Swagger UI page in the default browser
                 OpenSwaggerPage();
             }
 
@@ -81,5 +83,6 @@ namespace MyEmpApi
                 Process.Start("open", baseAddress);
             }
         }
+
     }
 }

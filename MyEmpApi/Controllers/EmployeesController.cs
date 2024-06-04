@@ -24,7 +24,7 @@ namespace MyEmpApi.Controllers
         [Route("GetAllEmployees")]
         public string GetEmployees()
         {
-            DataTable dt = _databaseHelper.ExecuteQuery("SELECT * FROM Employees");
+            DataTable dt = _databaseHelper.ExecuteScript("SELECT * FROM Employees");
             List<Employee> employeeList = new List<Employee>();
             Response response = new Response();
             if (dt.Rows.Count > 0)

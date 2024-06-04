@@ -1,0 +1,16 @@
+{
+	"$schema": "http://json-schema.org/draft-04/schema#",
+	"type": "object",
+	"properties": {
+		"Id": {
+			"type": "integer"
+		},
+		"EmpName": {
+			"type": [ "string", "null" ]
+		},
+		"Password": {
+			"type": [ "string", "null" ]
+		}
+	},
+	"required": [ "Id" ]
+}
