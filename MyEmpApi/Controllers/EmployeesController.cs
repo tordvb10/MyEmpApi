@@ -5,6 +5,7 @@ using MyEmpApi.Models;
 using Newtonsoft.Json;
 using System.Data.SqlClient;
 using System.Data;
+using MyEmpApi.Data;
 
 namespace MyEmpApi.Controllers
 {
@@ -12,31 +13,30 @@ namespace MyEmpApi.Controllers
     [ApiController]
     public class EmployeesController : ControllerBase
     {
-        private readonly IConfiguration _configuration;
+        private readonly DatabaseHelper _databaseHelper;
 
-        public EmployeesController(IConfiguration configuration)
+        public EmployeesController(DatabaseHelper databaseHelper)
         {
-            _configuration = configuration;
+            _databaseHelper = databaseHelper;
         }
 
         [HttpGet]
         [Route("GetAllEmployees")]
         public string GetEmployees()
         {
-            SqlConnection con = new SqlConnection(_configuration.GetConnectionString("EmployeeAppCon"));
-            SqlDataAdapter da = new SqlDataAdapter("SELECT * FROM Employees", con);
-            DataTable dt = new DataTable();
-            da.Fill(dt);
+            DataTable dt = _databaseHelper.ExecuteQuery("SELECT * FROM Employees");
             List<Employee> employeeList = new List<Employee>();
             Response response = new Response();
             if (dt.Rows.Count > 0)
             {
                 for (int i = 0; i < dt.Rows.Count; i++)
                 {
-                    Employee employee = new Employee();
-                    employee.Id = Convert.ToInt32(dt.Rows[i]["EmpId"]);
-                    employee.EmpName = Convert.ToString(dt.Rows[i]["EmpName"]);
-                    employee.Password = Convert.ToString(dt.Rows[i]["Password"]);
+                    Employee employee = new Employee
+                    {
+                        Id = Convert.ToInt32(dt.Rows[i]["EmpId"]),
+                        EmpName = Convert.ToString(dt.Rows[i]["EmpName"]),
+                        Password = Convert.ToString(dt.Rows[i]["Password"])
+                    };
                     employeeList.Add(employee);
                 }
             }

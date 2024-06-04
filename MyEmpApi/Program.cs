@@ -6,6 +6,8 @@ using System;
 using System.Diagnostics;
 using System.IO;
 using System.Runtime.InteropServices;
+using MyEmpApi.Data;
+
 
 namespace MyEmpApi
 {
@@ -19,6 +21,16 @@ namespace MyEmpApi
             builder.Services.AddControllers();
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
+
+            // Register the DatabaseHelper with DI container
+            var connectionString = builder.Configuration.GetConnectionString("EmployeeAppCon");
+
+            if (string.IsNullOrEmpty(connectionString))
+            {
+                throw new InvalidOperationException("Connection string 'EmployeeAppCon' not found.");
+            }
+
+            builder.Services.AddSingleton(new DatabaseHelper(connectionString));
 
             var app = builder.Build();
 
@@ -69,6 +81,5 @@ namespace MyEmpApi
                 Process.Start("open", baseAddress);
             }
         }
-
     }
 }

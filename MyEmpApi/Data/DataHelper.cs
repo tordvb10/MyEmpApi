@@ -6,11 +6,11 @@ namespace MyEmpApi.Data
     public class DatabaseHelper
     {
         private readonly string _connectionString;
-        public DatabaseHelper (string connectionString)
+        public DatabaseHelper(string connectionString)
         {
             _connectionString = connectionString;
         }
-        public DataTable ExecuteQuery(stirng query)
+        public DataTable ExecuteQuery(string query)
         {
             using (SqlConnection con = new SqlConnection(_connectionString))
             {
