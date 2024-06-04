@@ -2,6 +2,10 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using System;
+using System.Diagnostics;
+using System.IO;
+using System.Runtime.InteropServices;
 
 namespace MyEmpApi
 {
@@ -22,7 +26,13 @@ namespace MyEmpApi
             if (app.Environment.IsDevelopment())
             {
                 app.UseSwagger();
-                app.UseSwaggerUI();
+                app.UseSwaggerUI(c =>
+                {
+                    c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
+                });
+
+                // Open Swagger UI page in default browser
+                OpenSwaggerPage();
             }
 
             app.UseHttpsRedirection();
@@ -42,5 +52,23 @@ namespace MyEmpApi
 
             app.Run();
         }
+
+        private static void OpenSwaggerPage()
+        {
+            var baseAddress = $"http://localhost:5270/swagger/index.html";
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+            {
+                Process.Start(new ProcessStartInfo(baseAddress) { UseShellExecute = true });
+            }
+            else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
+            {
+                Process.Start("xdg-open", baseAddress);
+            }
+            else if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
+            {
+                Process.Start("open", baseAddress);
+            }
+        }
+
     }
 }
